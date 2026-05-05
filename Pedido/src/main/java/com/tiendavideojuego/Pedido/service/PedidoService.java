@@ -30,7 +30,7 @@ public class PedidoService {
 
     // Ver historial de pedidos por usuario
     public List<Pedido> historialPorUsuario(Long usuarioId) {
-        return pedidoRepository.EncontrarUsuarioPorId(usuarioId);
+        return pedidoRepository.findByUsuarioId(usuarioId);
     }
 
     // Actualizar pedido
