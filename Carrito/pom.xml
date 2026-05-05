@@ -11,8 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>Registro</artifactId>
-    <name>Registro</name>
+    <artifactId>Carrito</artifactId>
+    <name>Carrito</name>
 
     <dependencies>
         <dependency>
