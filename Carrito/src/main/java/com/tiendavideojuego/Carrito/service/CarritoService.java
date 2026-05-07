@@ -1,47 +1,67 @@
 package com.tiendavideojuego.Carrito.service;
 
 import com.tiendavideojuego.Carrito.model.Carro;
-import com.tiendavideojuego.Carrito.repository.CarritoRepository;
+import com.tiendavideojuego.Carrito.model.DetalleCarrito;
+import com.tiendavideojuego.Carrito.repository.CarroRepository;
+import com.tiendavideojuego.Carrito.repository.DetalleCarritoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CarritoService {
 
     @Autowired
-    private CarritoRepository carritoRepository;
+    private CarroRepository carritoRepository;
 
-    public Carro agregarJuego(Carro item) {
-        item.setSubtotal(item.getCantidad() * item.getPrecioUnitario());
-        return carritoRepository.save(item);
+    @Autowired
+    private DetalleCarritoRepository detalleCarritoRepository;
+
+    public Carro crearCarrito(Carro carrito) {
+        return carritoRepository.save(carrito);
     }
 
     public List<Carro> verCarrito(Long usuarioId) {
         return carritoRepository.findByUsuarioId(usuarioId);
     }
 
-    public Double totalAPagar(Long usuarioId) {
-        return carritoRepository.findByUsuarioId(usuarioId)
-                .stream()
-                .mapToDouble(Carro::getSubtotal)
-                .sum();
+    public DetalleCarrito agregarJuego(DetalleCarrito detalle) {
+        detalle.setSubtotal(detalle.getCantidad() * detalle.getPrecioUnitario());
+        DetalleCarrito guardado = detalleCarritoRepository.save(detalle);
+
+        Carro carrito = carritoRepository.findById(detalle.getCarrito().getId())
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+        double total = detalleCarritoRepository.findByCarritoId(carrito.getId())
+                .stream().mapToDouble(DetalleCarrito::getSubtotal).sum();
+        carrito.setTotal(total);
+        carritoRepository.save(carrito);
+
+        return guardado;
     }
 
-    public Carro actualizarItem(Long id, Carro datosNuevos) {
-        Carro item = carritoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
-        item.setCantidad(datosNuevos.getCantidad());
-        item.setPrecioUnitario(datosNuevos.getPrecioUnitario());
-        item.setSubtotal(datosNuevos.getCantidad() * datosNuevos.getPrecioUnitario());
-        return carritoRepository.save(item);
+    public List<DetalleCarrito> verDetalles(Long carritoId) {
+        return detalleCarritoRepository.findByCarritoId(carritoId);
+    }
+
+    public DetalleCarrito actualizarDetalle(Long id, DetalleCarrito datosNuevos) {
+        DetalleCarrito detalle = detalleCarritoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Detalle no encontrado"));
+        detalle.setCantidad(datosNuevos.getCantidad());
+        detalle.setPrecioUnitario(datosNuevos.getPrecioUnitario());
+        detalle.setSubtotal(datosNuevos.getCantidad() * datosNuevos.getPrecioUnitario());
+        return detalleCarritoRepository.save(detalle);
     }
 
     public void eliminarJuego(Long id) {
-        carritoRepository.deleteById(id);
+        detalleCarritoRepository.deleteById(id);
     }
 
-    public void vaciarCarrito(Long usuarioId) {
-        carritoRepository.deleteByUsuarioId(usuarioId);
+    //Esto es para poder pagar, se usa .stream para que se hagan operaciones matemáticas, y que el programa pueda procesarlas.
+    //.mapToDouble se usa para transformar valores a double para poder procesarlos mejor y hacer operaciones matemáticas básicas
+    public Double totalAPagar(Long carritoId) {
+        return detalleCarritoRepository.findByCarritoId(carritoId)
+                .stream().mapToDouble(DetalleCarrito::getSubtotal).sum();
     }
 }

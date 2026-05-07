@@ -12,28 +12,23 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    // Crear pedido
     public Pedido crearPedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
 
-    // Ver un pedido
     public Pedido obtenerPedido(Long id) {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
 
-    // Ver todos los pedidos
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
     }
 
-    // Ver historial de pedidos por usuario
     public List<Pedido> historialPorUsuario(Long usuarioId) {
         return pedidoRepository.findByUsuarioId(usuarioId);
     }
 
-    // Actualizar pedido
     public Pedido actualizarPedido(Long id, Pedido datosNuevos) {
         Pedido pedido = obtenerPedido(id);
         pedido.setProducto(datosNuevos.getProducto());
@@ -44,7 +39,6 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    // Eliminar pedido
     public void eliminarPedido(Long id) {
         pedidoRepository.deleteById(id);
     }

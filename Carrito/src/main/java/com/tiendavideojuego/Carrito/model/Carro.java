@@ -1,8 +1,11 @@
 package com.tiendavideojuego.Carrito.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
+
+import java.util.List;
 
 @Entity
 @Table(name = "carrito")
@@ -15,17 +18,18 @@ public class Carro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "El usuario es obligatorio")
     private Long usuarioId;
-    private Long juegoId;
-    private String nombreJuego;
-    private Integer cantidad;
-    private Double precioUnitario;
-    private Double subtotal;
+
+    private Double total;
     private LocalDateTime fechaAgregado;
+
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
+    private List<DetalleCarrito> detalles;
 
     @PrePersist
     public void inicializar() {
         this.fechaAgregado = LocalDateTime.now();
-        this.subtotal = this.cantidad * this.precioUnitario;
+        this.total = 0.0;
     }
 }

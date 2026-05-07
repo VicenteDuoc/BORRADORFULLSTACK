@@ -1,6 +1,9 @@
 package com.tiendavideojuego.Pedido.model;
 
+import com.tiendavideojuego.Pedido.model.Estado;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -15,10 +18,18 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long    usuarioId;
-    private String  producto;
+    @NotNull(message = "El usuario es obligatorio")
+    private Long usuarioId;
+
+    @NotBlank(message = "El producto es obligatorio")
+    private String producto;
+
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "La cantidad debe ser mayor a 0")
     private Integer cantidad;
-    private Double  total;
+
+    @NotNull(message = "El total es obligatorio")
+    private Double total;
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
@@ -27,9 +38,8 @@ public class Pedido {
     private LocalDateTime fechaEntrega;
 
     @PrePersist
-    public void inicializar(){
+    public void inicializar() {
         this.fechaPedido = LocalDateTime.now();
         this.estado = Estado.PENDIENTE;
-
     }
 }

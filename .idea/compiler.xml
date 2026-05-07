@@ -7,15 +7,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mi-microservicio1 (1) (com.duoc.miproyecto)" />
         <module name="mi-microservicio1 (2) (com.duoc.miproyecto)" />
         <module name="mi-microservicio1 (3) (com.duoc.miproyecto)" />
+        <module name="mi-microservicio1 (1) (com.duoc.miproyecto)" />
         <module name="mi-microservicio1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Calificar" target="17" />
+      <module name="Categoria" target="17" />
+      <module name="Notificaciones" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Calificar" options="-parameters" />
+      <module name="Categoria" options="-parameters" />
+      <module name="Notificaciones" options="-parameters" />
       <module name="mi-microservicio1" options="-parameters" />
       <module name="mi-microservicio1 (1) (com.duoc.miproyecto)" options="-parameters" />
       <module name="mi-microservicio1 (2) (com.duoc.miproyecto)" options="-parameters" />

@@ -4,7 +4,6 @@ import com.tiendavideojuego.Carrito.model.Carro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface CarritoRepository extends JpaRepository<Carro, Long> {
+public interface CarroRepository extends JpaRepository<Carro, Long> {
     List<Carro> findByUsuarioId(Long usuarioId);
-    void deleteByUsuarioId(Long usuarioId);
 }

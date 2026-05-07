@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class Jwt {
 
-    private final String SECRET = "kakaka";
+    private final String SECRET = "clave_secreta_larga_tiendavideojuego_2024_debe_tener_mas_de_32_caracteres";
     private final long EXPIRATION = 86400000;
 
     private Key getKey() {

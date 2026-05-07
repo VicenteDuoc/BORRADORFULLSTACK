@@ -1,6 +1,7 @@
 package com.tiendavideojuego.Carrito.controller;
 
 import com.tiendavideojuego.Carrito.model.Carro;
+import com.tiendavideojuego.Carrito.model.DetalleCarrito;
 import com.tiendavideojuego.Carrito.service.CarritoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,8 @@ public class CarritoController {
     private CarritoService carritoService;
 
     @PostMapping
-    public Carro agregar(@RequestBody Carro item) {
-        return carritoService.agregarJuego(item);
+    public Carro crearCarrito(@RequestBody Carro carrito) {
+        return carritoService.crearCarrito(carrito);
     }
 
     @GetMapping("/{usuarioId}")
@@ -23,26 +24,30 @@ public class CarritoController {
         return carritoService.verCarrito(usuarioId);
     }
 
-    @GetMapping("/total/{usuarioId}")
-    public Double totalAPagar(@PathVariable Long usuarioId) {
-        return carritoService.totalAPagar(usuarioId);
+    @PostMapping("/detalle")
+    public DetalleCarrito agregarJuego(@RequestBody DetalleCarrito detalle) {
+        return carritoService.agregarJuego(detalle);
     }
 
-    @PutMapping("/{id}")
-    public Carro actualizar(@PathVariable Long id,
-                                  @RequestBody Carro datosNuevos) {
-        return carritoService.actualizarItem(id, datosNuevos);
+    @GetMapping("/detalle/{carritoId}")
+    public List<DetalleCarrito> verDetalles(@PathVariable Long carritoId) {
+        return carritoService.verDetalles(carritoId);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/total/{carritoId}")
+    public Double totalAPagar(@PathVariable Long carritoId) {
+        return carritoService.totalAPagar(carritoId);
+    }
+
+    @PutMapping("/detalle/{id}")
+    public DetalleCarrito actualizar(@PathVariable Long id,
+                                     @RequestBody DetalleCarrito datosNuevos) {
+        return carritoService.actualizarDetalle(id, datosNuevos);
+    }
+
+    @DeleteMapping("/detalle/{id}")
     public String eliminar(@PathVariable Long id) {
         carritoService.eliminarJuego(id);
         return "Juego eliminado del carrito";
-    }
-
-    @DeleteMapping("/vaciar/{usuarioId}")
-    public String vaciar(@PathVariable Long usuarioId) {
-        carritoService.vaciarCarrito(usuarioId);
-        return "Carrito vaciado";
     }
 }
